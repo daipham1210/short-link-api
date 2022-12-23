@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions',
-    registrations: 'users/registrations',
+    registrations: 'users/registrations'
   }
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :short_urls, only: [:create]
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get '/:shorten', to: 'redirects#show'
 end
