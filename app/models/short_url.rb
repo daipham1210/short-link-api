@@ -1,11 +1,8 @@
 class ShortUrl < ApplicationRecord
-  self.primary_key = :shorten
-  SHORTEN_LENGTH = 6
+  # Validation
+  validates :origin, presence: true, http_url: true
 
-  # Callback
-  before_create :generate_shorten
-
-  def generate_shorten
-    self.shorten = SecureRandom.alphanumeric(SHORTEN_LENGTH)
+  def short
+    Rails.application.routes.url_helpers.short_url(shorten:)
   end
 end
