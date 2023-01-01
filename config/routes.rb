@@ -9,5 +9,5 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/:shorten', to: 'redirects#show'
+  get '/:shorten', to: 'redirects#show', as: :short
 end
