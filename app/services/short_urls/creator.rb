@@ -4,7 +4,6 @@ module ShortUrls
   class Creator
     include Callable
     SHORTEN_LENGTH = 6
-    CUSTOM_SHORTEN_LENGTH = 128
 
     def initialize(user, params)
       @user = user
@@ -12,7 +11,6 @@ module ShortUrls
     end
 
     def call
-      validate_custom_shorten! if @params.key?('shorten')
       loop do
         return save_short_url
       rescue ActiveRecord::RecordNotUnique
@@ -33,13 +31,6 @@ module ShortUrls
       short_url.expire_at = 1.month.from_now
       short_url.save
       short_url
-    end
-
-    def validate_custom_shorten!
-      custom_shorten = @params[:shorten].to_s
-      raise 'Invalid Short Url' if !custom_shorten || custom_shorten.length > CUSTOM_SHORTEN_LENGTH
-
-      raise 'Short Url has been used' if ShortUrl.exists?(shorten: custom_shorten)
     end
   end
 end

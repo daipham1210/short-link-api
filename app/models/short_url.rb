@@ -1,4 +1,5 @@
 class ShortUrl < ApplicationRecord
+  CUSTOM_SHORTEN_LENGTH = 128
   # Validation
   validates :origin, presence: true, http_url: true
 
