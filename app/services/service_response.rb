@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
 class ServiceResponse
-  def self.success(message: nil, payload: {}, http_status: :ok)
-    new(status: :success, message:, payload:, http_status:)
+  def self.success(message: nil, payload: {})
+    new(status: :success, message:, payload:)
   end
 
-  def self.error(message:, payload: {}, http_status: nil, reason: nil)
-    new(status: :error, message:, payload:, http_status:, reason:)
+  def self.error(message:, payload: {})
+    new(status: :error, message:, payload:)
   end
 
-  attr_reader :status, :message, :http_status, :payload, :reason
+  attr_reader :status, :message, :payload
 
-  def initialize(status:, message: nil, payload: {}, http_status: nil, reason: nil)
+  def initialize(status:, message: nil, payload: {})
     self.status = status
     self.message = message
     self.payload = payload
-    self.http_status = http_status
-    self.reason = reason
   end
 
   def [](key)
@@ -24,11 +22,7 @@ class ServiceResponse
   end
 
   def to_h
-    (payload || {}).merge(
-      status: status,
-      message: message,
-      http_status: http_status,
-      reason: reason)
+    (payload || {}).merge(status:, message:)
   end
 
   def success?
@@ -47,5 +41,5 @@ class ServiceResponse
 
   private
 
-  attr_writer :status, :message, :http_status, :payload, :reason
+  attr_writer :status, :message, :payload
 end

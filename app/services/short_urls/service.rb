@@ -15,8 +15,11 @@ module ShortUrls
       @user.short_urls.limit(limit).offset(offset)
     end
 
-    def save_short_url(short_url, permit_params)
-      short_url.update!(permit_params)
+    def save_short_url(short_url, data)
+      short_url.update!(data)
+      ServiceResponse.success(payload: short_url)
+    rescue ActiveRecord::RecordNotUnique
+      ServiceResponse.error(message: 'Shorten has been used!')
     end
 
     def extract_title(url)
