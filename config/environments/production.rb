@@ -32,7 +32,6 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
-  config.hosts << "netlink.onrender.com"
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -85,3 +84,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+
+Rails.application.config.hosts << "short-link-api-production.up.railway.app"
