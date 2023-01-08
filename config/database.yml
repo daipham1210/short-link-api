@@ -9,3 +9,9 @@ development:
   username: postgres
   password: password
   host: db
+
+production:
+  database: railway
+  username: postgres
+  password: 6936
+  host: containers-us-west-45.railway.app
