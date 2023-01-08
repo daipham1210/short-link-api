@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "3ed8f9e5-e4ec-4342-8f43-e08e3a1c740e",
+		"name": "Short Link Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3450291"
+	},
+	"item": [
+		{
+			"name": "create users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"email\": \"dai@gmail.com\",\n        \"password\": 123456\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://short-link-api-production.up.railway.app/users",
+					"protocol": "https",
+					"host": [
+						"short-link-api-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"email\": \"dai@gmail.com\",\n        \"password\": 123456\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://short-link-api-production.up.railway.app/users/sign_in",
+					"protocol": "https",
+					"host": [
+						"short-link-api-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"users",
+						"sign_in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create shorturl",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const postRequest = {",
+							"  url: 'https://short-link-api-production.up.railway.app/users/sign_in',",
+							"  method: 'POST',",
+							"  header: {",
+							"    \"Content-Type\": \"application/json\"",
+							"  },",
+							"  body: {",
+							"    \"user\": {",
+							"        \"email\": \"dai@gmail.com\",",
+							"        \"password\": 123456",
+							"    },",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, res) {",
+							"    var responseJson = res.json();",
+							"    console.log(responseJson);",
+							"    pm.environment.set('ACCESS_TOKEN', responseJson['access_token']);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  {{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"origin\": \"http://abc3.vn\",\n    \"label\": \"Abc3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://short-link-api-production.up.railway.app/api/v1/short_urls",
+					"protocol": "https",
+					"host": [
+						"short-link-api-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"short_urls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List shorturl",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const postRequest = {",
+							"  url: 'https://short-link-api-production.up.railway.app/users/sign_in',",
+							"  method: 'POST',",
+							"  header: {",
+							"    \"Content-Type\": \"application/json\"",
+							"  },",
+							"  body: {",
+							"    \"user\": {",
+							"        \"email\": \"dai@gmail.com\",",
+							"        \"password\": 123456",
+							"    },",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, res) {",
+							"    var responseJson = res.json();",
+							"    console.log(responseJson);",
+							"    pm.environment.set('ACCESS_TOKEN', responseJson['access_token']);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://short-link-api-production.up.railway.app/api/v1/short_urls?limit=5&offset=0",
+					"protocol": "https",
+					"host": [
+						"short-link-api-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"short_urls"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update shorturl",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const postRequest = {",
+							"  url: 'https://short-link-api-production.up.railway.app/users/sign_in',",
+							"  method: 'POST',",
+							"  header: {",
+							"    \"Content-Type\": \"application/json\"",
+							"  },",
+							"  body: {",
+							"    \"user\": {",
+							"        \"email\": \"dai@gmail.com\",",
+							"        \"password\": 123456",
+							"    },",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, res) {",
+							"    var responseJson = res.json();",
+							"    console.log(responseJson);",
+							"    pm.environment.set('ACCESS_TOKEN', responseJson['access_token']);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 96,\n    \"origin\": \"http://abc3.vn\",\n    \"label\": \"abc3\",\n    \"short\": \"http://localhost:3000/yjRSUD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://short-link-api-production.up.railway.app/api/v1/short_urls/96",
+					"protocol": "https",
+					"host": [
+						"short-link-api-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"short_urls",
+						"96"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
