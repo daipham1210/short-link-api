@@ -14,7 +14,7 @@ module ShortUrls
       loop do
         return save_short_url
       rescue ActiveRecord::RecordNotUnique
-        continue
+        next
       end
     end
 
@@ -27,7 +27,12 @@ module ShortUrls
     def save_short_url
       short_url = ShortUrl.new(origin: @params[:origin])
       short_url.user_id = @user.id
-      short_url.shorten = @params[:shorten].to_s || generate_shorten
+      short_url.label = @params[:label]
+      short_url.shorten = if @params[:shorten].to_s.empty?
+                            generate_shorten
+                          else
+                            @params[:shorten].to_s
+                          end
       short_url.expire_at = 1.month.from_now
       short_url.save
       short_url

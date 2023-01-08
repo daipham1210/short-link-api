@@ -8,7 +8,7 @@ development:
   database: short_url_dev
   username: postgres
   password: password
-  host: db
+  # host: db
 
 production:
   database: railway

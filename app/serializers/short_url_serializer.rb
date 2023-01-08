@@ -1,5 +1,5 @@
 class ShortUrlSerializer < ActiveModel::Serializer
-  attributes :origin, :expire_at, :short
+  attributes :id, :label, :origin, :expire_at, :short
 
   def short
     object.short
