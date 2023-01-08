@@ -66,3 +66,4 @@ Rails.application.configure do
 end
 
 Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
+Rails.application.config.hosts << "short-link-api-production.up.railway.app"
