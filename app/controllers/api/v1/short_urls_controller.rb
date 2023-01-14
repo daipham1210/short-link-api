@@ -3,8 +3,7 @@
 module Api
   module V1
     class ShortUrlsController < ApiController
-      before_action :validate_custom_shorten, only: :create
-
+      before_action :find_short_url, only: [:update, :destroy]
       def index
         short_urls = service.get_short_urls
         render json: {
@@ -15,48 +14,33 @@ module Api
       end
 
       def create
-        @short_url = ShortUrls::Creator.call(current_user, permit_params)
-        if @short_url.persisted?
-          render json: @short_url, status: :ok
-        else
-          render json: { errors: @short_url.errors.full_messages }, status: :bad_request
-        end
+        validate_payload(ShortUrlContract, permit_params, { is_create: true })
+        render_response(ShortUrls::Creator.call(current_user, permit_params))
       end
 
       def update
-      #   short_url = service.find(params[:id])
-      #   unless short_url
-      #     render json: { errors: 'Short Url not found' }, status: :bad_request
-      #   end
-      #   service.save_short_url(short_url, permit_params)
+        validate_payload(ShortUrlContract, permit_params)
+        render_response(service.update(@short_url, permit_params))
+      end
 
-      #   render json: short_url, status: :ok
-      # rescue e
-      #   render json: { errors: @short_url.errors.full_messages }, status: :bad_request
+      def destroy
+        service.delete(@short_url.id)
+        render json: { success: true }, status: :ok
       end
 
       private
 
       def service
-        @short_url_service ||= ShortUrls::Service.new(current_user, params)
-        @short_url_service
+        ShortUrls::Service.new(current_user, params)
       end
 
       def permit_params
-        params.permit(%i[origin shorten label])
+        params.permit(%i[origin shorten label]).to_h
       end
 
-      def validate_custom_shorten
-        return unless params.key?('shorten')
-
-        custom_shorten = params[:shorten].to_s
-        if !custom_shorten || custom_shorten.length > ShortUrl::CUSTOM_SHORTEN_LENGTH
-          render json: { errors: 'Invalid custom short url' }, status: :bad_request
-        end
-
-        if ShortUrl.exists?(shorten: custom_shorten)
-          render json: { errors: 'Short url has been used.' }, status: :bad_request
-        end
+      def find_short_url
+        @short_url = service.find(params[:id])
+        raise Error::RecordNotFound.new('Short url not found!') unless @short_url
       end
     end
   end
