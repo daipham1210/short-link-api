@@ -27,6 +27,6 @@ module ShortUrlApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
     config.autoload_paths += %W["#{config.root}/app/validators/"]
-    config.autoload_paths << "#{config.root}/lib"
+    config.autoload_paths << "#{config.root}/app/helper/"
   end
 end
