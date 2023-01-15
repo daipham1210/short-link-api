@@ -14,18 +14,23 @@ module Api
       end
 
       def create
-        validate_payload(ShortUrlContract, permit_params, { is_create: true })
+        validate_request_payload!(ShortUrlContract, permit_params)
         render_response(ShortUrls::Creator.call(current_user, permit_params))
       end
 
       def update
-        validate_payload(ShortUrlContract, permit_params)
+        validate_request_payload!(ShortUrlContract, permit_params)
         render_response(service.update(@short_url, permit_params))
       end
 
       def destroy
         service.delete(@short_url.id)
         render json: { success: true }, status: :ok
+      end
+
+      def check_shorten_available
+        is_available = service.check_shorten_available(params[:shorten])
+        render json: { is_available: }, status: :ok
       end
 
       private
@@ -40,7 +45,7 @@ module Api
 
       def find_short_url
         @short_url = service.find(params[:id])
-        raise Error::RecordNotFound.new('Short url not found!') unless @short_url
+        not_found!('Short url not found!') unless @short_url
       end
     end
   end

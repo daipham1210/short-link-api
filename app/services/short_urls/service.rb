@@ -26,6 +26,10 @@ class ShortUrls::Service
     ShortUrl.destroy(short_url_id)
   end
 
+  def check_shorten_available(shorten)
+    !ShortUrl.exists?(shorten:)
+  end
+
   def extract_title(url)
     require 'nokogiri'
     require 'open-uri'

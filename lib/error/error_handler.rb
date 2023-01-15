@@ -28,16 +28,4 @@ module Error
       render json: { error:, messages: }, status:
     end
   end
-
-  class RecordNotFound < CustomError
-    def initialize(messages)
-      super(:record_not_found, 404, messages)
-    end
-  end
-
-  class InvalidPayload < CustomError
-    def initialize(messages)
-      super(:invalid_payload, 400, messages)
-    end
-  end
 end

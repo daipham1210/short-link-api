@@ -14,7 +14,11 @@ module ShortUrls
       loop do
         return save_short_url
       rescue ActiveRecord::RecordNotUnique
-        next
+        if @params[:shorten].to_s.empty?
+          next
+        else
+          bad_request!('Shorten has been used')
+        end
       end
     end
 
