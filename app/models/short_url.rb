@@ -13,12 +13,17 @@
 #  label      :string(255)
 #
 class ShortUrl < ApplicationRecord
+  has_secure_password validations: false
   CUSTOM_SHORTEN_LENGTH = 128
   # Validation
   validates :origin, presence: true, http_url: true
   validates :label, presence: true
 
-  def short
-    Rails.application.routes.url_helpers.short_url(shorten:)
+  def secured?
+    password_digest && !password_digest.empty?
+  end
+
+  def expired?
+    expire_at < Time.now
   end
 end

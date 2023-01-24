@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_24_023657) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_24_082606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "timescaledb"
 
   create_table "short_urls", force: :cascade do |t|
     t.string "origin", limit: 1024, default: "", null: false
@@ -23,6 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_023657) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "label", limit: 255
+    t.string "password_digest"
     t.index ["shorten"], name: "index_short_urls_on_shorten", unique: true
     t.index ["user_id"], name: "index_short_urls_on_user_id"
   end
