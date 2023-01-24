@@ -35,14 +35,18 @@ module ShortUrls
     end
 
     def save_short_url
-      short_url = ShortUrl.new(origin: @params[:origin])
+      origin = @params[:origin].to_s || ''
+      password = @params[:password].to_s || ''
+      shorten = @params[:shorten].to_s || ''
+      short_url = ShortUrl.new(origin:)
       short_url.user_id = @user.id
       short_url.label = @params[:label] || ''
-      short_url.shorten = if @params[:shorten].to_s.empty?
+      short_url.shorten = if shorten.empty?
                             generate_shorten
                           else
-                            @params[:shorten].to_s
+                            shorten
                           end
+      short_url.password = password unless password.empty?
       short_url.expire_at = 1.month.from_now
       short_url.save!
       ServiceResponse.success(payload: short_url)

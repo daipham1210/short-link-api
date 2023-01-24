@@ -33,6 +33,11 @@ module Api
         render json: { is_available: }, status: :ok
       end
 
+      def check_redirection
+        rs = RedirectService.check(params)
+        render json: rs.payload, status: :ok
+      end
+
       private
 
       def service
@@ -40,7 +45,7 @@ module Api
       end
 
       def permit_params
-        params.permit(%i[origin shorten label]).to_h
+        params.permit(%i[origin shorten label password]).to_h
       end
 
       def find_short_url

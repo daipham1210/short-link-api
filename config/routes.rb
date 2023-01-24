@@ -7,11 +7,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :short_urls, only: %w[index create update destroy] do
         collection do
-          get '/check', to: 'short_urls#check_shorten_available'
+          get '/check_slug', to: 'short_urls#check_shorten_available'
+          post '/check_redirection', to: 'short_urls#check_redirection'
         end
       end
     end
   end
-
-  get '/:shorten', to: 'redirects#show', as: :short
 end
