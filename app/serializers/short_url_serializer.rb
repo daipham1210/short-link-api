@@ -6,6 +6,6 @@ class ShortUrlSerializer < ActiveModel::Serializer
   end
 
   def expire_at
-    object.expire_at.strftime('%d-%m-%Y %H:%M')
+    (object.expire_at.to_f * 1000).to_i
   end
 end
